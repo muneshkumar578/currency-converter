@@ -9,7 +9,7 @@ This project implements a robust, scalable, and maintainable Currency Converter 
 ## Project Structure
 
 ```
-- CurrencyConverter
+CurrencyConverter
   ├── CurrencyConverter.API             # API layer - Controllers and Middleware
   ├── CurrencyConverter.Dto             # DTOs - Request, Response, Error Models
   ├── CurrencyConverter.Infrastructure  # External providers & Factory pattern
@@ -27,7 +27,7 @@ This project implements a robust, scalable, and maintainable Currency Converter 
    ```
 
 2. **Update appsettings.json and appsettings.Development.json**
-   - Configure API keys, JWT secrets, and Frankfurter endpoint if needed.
+   - Configure JWT secrets and Frankfurter endpoint if needed.
    - Define rate-limiting, logging, and environment-specific configs.
 
 3. **Build the project**
@@ -61,7 +61,7 @@ This project implements a robust, scalable, and maintainable Currency Converter 
 ## Key Features
 
 - ✅ Retrieve latest exchange rates
-- ✅ Convert currency amounts (restricted currencies: TRY, PLN, THB, MXN)
+- ✅ Convert currency amounts
 - ✅ Historical rates with pagination
 - ✅ Caching (to reduce load on Frankfurter API)
 - ✅ Retry policies with exponential backoff

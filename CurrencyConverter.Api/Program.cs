@@ -73,7 +73,8 @@ app.UseExceptionHandler(appError =>
         await GenericApiErrorHandler.HandleErrorAsync(context));
 });
 
-app.UseHttpsRedirection();
+// Open it when you want to use HTTPS redirection
+//app.UseHttpsRedirection();
 
 app.UseRouting();
 
