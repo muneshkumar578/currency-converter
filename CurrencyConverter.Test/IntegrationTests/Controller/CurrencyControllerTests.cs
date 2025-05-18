@@ -8,6 +8,9 @@ using Moq;
 
 namespace CurrencyConverter.Test.IntegrationTests.Controller;
 
+/// <summary>
+/// Unit tests for CurrencyController.
+/// </summary>
 public class CurrencyControllerTests
 {
     private readonly Mock<ICurrencyService> _mockCurrencyService;

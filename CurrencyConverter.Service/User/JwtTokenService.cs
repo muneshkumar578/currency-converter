@@ -8,6 +8,9 @@ using System.Text;
 
 namespace CurrencyConverter.Service.User;
 
+/// <summary>
+/// JwtTokenService is an implementation of ITokenService that generates JWT tokens.
+/// </summary>
 public class JwtTokenService : ITokenService
 {
     private readonly ConfigDto _config;

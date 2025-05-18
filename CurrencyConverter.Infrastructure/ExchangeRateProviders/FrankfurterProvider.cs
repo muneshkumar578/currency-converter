@@ -43,7 +43,7 @@ public class FrankfurterProvider : IExchangeRateProvider
     }
 
 
-    private string LatestRatesEnpoint => "latest?base={0}";
+    private string LatestRatesEnpoint => "latestt?base={0}";
 
 
     private static string LatestRatesCacheKey(string baseCurrency)
@@ -63,10 +63,11 @@ public class FrankfurterProvider : IExchangeRateProvider
 
 
     /// <summary>
-    /// Sets the cache data for the given cache key. Default expiration time is 1 minute.
+    /// Set cache key for the given data.
     /// </summary>
     /// <param name="cacheKey"></param>
-    /// <param name="exchangeRateDto"></param>
+    /// <param name="data"></param>
+    /// <param name="expiryInMinutes"></param>
     private void SetCacheKey(string cacheKey, object? data, int expiryInMinutes = 5)
     {
         _cache.Set(cacheKey, data, TimeSpan.FromMinutes(expiryInMinutes));
@@ -99,6 +100,11 @@ public class FrankfurterProvider : IExchangeRateProvider
     #region Public Methods
 
 
+    /// <summary>
+    /// Get the latest exchange rates for a given base currency.
+    /// </summary>
+    /// <param name="baseCurrency"></param>
+    /// <returns></returns>
     public async Task<ApiResponseDto<ExchangeRateResponseDto>> GetLatestExchangeRatesAsync(string baseCurrency)
     {
         _logger.LogInformation("CorrelationId: {GetCorrelationId} - Fetching latest exchange rates for base currency: {baseCurrency}", GetCorrelationId(), baseCurrency);
@@ -137,6 +143,11 @@ public class FrankfurterProvider : IExchangeRateProvider
         return resultSuccess;
     }
 
+    /// <summary>
+    /// Convert currency from one to another.
+    /// </summary>
+    /// <param name="requestDto"></param>
+    /// <returns></returns>
     public async Task<ApiResponseDto<CurrencyConversionResponseDto>> ConvertCurrencyAsync(CurrencyConversionRequestDto requestDto)
     {
         _logger.LogInformation("CorrelationId: {GetCorrelationId} - Converting currency from {From} to {To} with amount {Amount}", GetCorrelationId(), requestDto.From, requestDto.To, requestDto.Amount);
@@ -190,6 +201,11 @@ public class FrankfurterProvider : IExchangeRateProvider
         return resultSuccess;
     }
 
+    /// <summary>
+    /// Get historical exchange rates for a given base currency and date range.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task<PaginatedApiResponseDto<HistoricalExchangeRatesResponseDto>> GetHistoricalExchangeRatesAsync(HistoricalExchangeRatesRequestDto request)
     {
         _logger.LogInformation("CorrelationId: {GetCorrelationId} - Fetching historical exchange rates for base currency: {BaseCurrency} from {StartDate} to {EndDate}", GetCorrelationId(), request.BaseCurrency, request.StartDate, request.EndDate);

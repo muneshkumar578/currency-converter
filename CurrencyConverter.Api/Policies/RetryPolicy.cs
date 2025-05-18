@@ -4,6 +4,10 @@ namespace CurrencyConverter.Api.Policies;
 
 public static class RetryPolicy
 {
+    /// <summary>
+    /// Retry policy for HTTP requests.
+    /// </summary>
+    /// <returns></returns>
     public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     {
         return Policy

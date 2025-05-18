@@ -26,6 +26,11 @@ public class CurrencyController : ControllerBase
         _config = config;
     }
 
+    /// <summary>
+    /// Get the latest exchange rates for a given base currency.
+    /// </summary>
+    /// <param name="baseCurrency"></param>
+    /// <returns></returns>
     [HttpGet("latest-rates")]
     public async Task<IActionResult> GetLatestExchangeRates([FromQuery] string baseCurrency)
     {
@@ -34,6 +39,12 @@ public class CurrencyController : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
 
+    /// <summary>
+    /// Convert currency from one to another.
+    /// This endpoint is only accessible to Admin users.
+    /// </summary>
+    /// <param name="requestDto"></param>
+    /// <returns></returns>
     [Authorize(Roles = "Admin")]
     [HttpPost("convert")]
     public async Task<IActionResult> ConvertCurrency([FromBody] CurrencyConversionRequestDto requestDto)
@@ -54,6 +65,11 @@ public class CurrencyController : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
 
+    /// <summary>
+    /// Get historical exchange rates for a given base currency.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [Authorize(Roles = "Admin")]
     [HttpGet("historical-rates")]
     public async Task<IActionResult> GetHistoricalExchangeRates([FromQuery] HistoricalExchangeRatesRequestDto request)

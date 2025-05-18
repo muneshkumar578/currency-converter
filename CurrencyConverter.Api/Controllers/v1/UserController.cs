@@ -20,6 +20,12 @@ public class UserController : ControllerBase
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// Authenticate a user and generate a JWT token.
+    /// This is fake authentication for demo purposes.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [AllowAnonymous]
     [HttpPost("authenticate")]
     public IActionResult Authenticate([FromBody] UserAuthenticateRequest request)

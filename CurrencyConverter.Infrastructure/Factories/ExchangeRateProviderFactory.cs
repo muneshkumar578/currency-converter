@@ -13,6 +13,12 @@ public class ExchangeRateProviderFactory : IExchangeRateProviderFactory
         _serviceProvider = serviceProvider;
     }
 
+    /// <summary>
+    /// Get the exchange rate provider based on the provider name.
+    /// </summary>
+    /// <param name="providerName"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public IExchangeRateProvider GetProvider(string providerName)
     {
         return providerName.ToLower() switch

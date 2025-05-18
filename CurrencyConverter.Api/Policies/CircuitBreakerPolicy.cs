@@ -5,6 +5,10 @@ namespace CurrencyConverter.Api.Policies;
 
 public static class CircuitBreakerPolicy
 {
+    /// <summary>
+    /// Circuit breaker policy for HTTP requests.
+    /// </summary>
+    /// <returns></returns>
     public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
     {
         return Policy

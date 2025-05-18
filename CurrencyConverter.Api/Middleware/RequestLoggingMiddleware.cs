@@ -3,6 +3,9 @@ using System.Security.Claims;
 
 namespace CurrencyConverter.Api.Middleware;
 
+/// <summary>
+/// Middleware to log HTTP requests and responses.
+/// </summary>
 public class RequestLoggingMiddleware
 {
     private readonly RequestDelegate _next;

@@ -1,6 +1,5 @@
 ﻿using CurrencyConverter.Dto.Shared;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -8,6 +7,11 @@ namespace CurrencyConverter.Api.Middleware;
 
 public static class GenericApiErrorHandler
 {
+    /// <summary>
+    /// Global exception handler for the API.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     public static async Task HandleErrorAsync(HttpContext context)
     {
         HttpStatusCode status = HttpStatusCode.InternalServerError;

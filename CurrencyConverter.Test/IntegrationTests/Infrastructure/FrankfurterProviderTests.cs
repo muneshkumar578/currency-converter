@@ -9,6 +9,9 @@ using RichardSzalay.MockHttp;
 
 namespace CurrencyConverter.Test.IntegrationTests.Infrastructure;
 
+/// <summary>
+/// FrankfurterProviderTests contains integration tests for the FrankfurterProvider.
+/// </summary>
 public class FrankfurterProviderTests
 {
     private readonly FrankfurterProvider _frankfurterProvider;

@@ -1,6 +1,5 @@
 ﻿using CurrencyConverter.Dto.Shared;
 using CurrencyConverter.Dto.User.Response;
-using System;
 
 namespace CurrencyConverter.Contract.User;
 
