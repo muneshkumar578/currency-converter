@@ -6,6 +6,7 @@ namespace CurrencyConverter.Dto.Shared
     {
         public ExchangeRateProviderConfigDto ExchangeRateProviderConfig { get; set; } = new();
         public JwtConfigDto JwtConfig { get; set; } = new();
+        public RateLimitConfigDto RateLimitConfig { get; set; } = new();
     }
 
     public class ExchangeRateProviderConfigDto
@@ -21,5 +22,11 @@ namespace CurrencyConverter.Dto.Shared
         public string Issuer { get; set; } = string.Empty;
         public string Audience { get; set; } = string.Empty;
         public int ExpirationInMinutes { get; set; }
+    }
+
+    public class RateLimitConfigDto
+    {
+        public int MaxRequestsInWindow { get; set; }
+        public int WindowInMinutes { get; set; }
     }
 }

@@ -46,7 +46,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add Rate Limiter
-ProgramHelper.AddRateLimiter(builder);
+ProgramHelper.AddRateLimiter(builder, config);
 
 
 // Add API versioning
@@ -78,11 +78,11 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseRateLimiter();
-
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 // Logging and Monitoring middleware
 app.UseMiddleware<RequestLoggingMiddleware>();
@@ -141,7 +141,7 @@ public static class ProgramHelper
             });
     }
 
-    public static void AddRateLimiter(WebApplicationBuilder builder)
+    public static void AddRateLimiter(WebApplicationBuilder builder, ConfigDto config)
     {
         builder.Services.AddRateLimiter(options =>
         {
@@ -153,9 +153,9 @@ public static class ProgramHelper
                     factory: partition => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
-                        PermitLimit = 10,
+                        PermitLimit = config.RateLimitConfig.MaxRequestsInWindow,
                         QueueLimit = 0,
-                        Window = TimeSpan.FromMinutes(1)
+                        Window = TimeSpan.FromMinutes(config.RateLimitConfig.WindowInMinutes)
                     }));
         });
     }
