@@ -12,10 +12,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add Serilog for logging
+ProgramHelper.AddLogging(builder);
+
+// Add Serilog to web host
+builder.Host.UseSerilog();
+
+Log.Information("Starting Currency Converter application");
 
 // Load configuration
 var configuration = builder.Configuration;
@@ -31,6 +40,7 @@ ProgramHelper.AddHttpClient(builder, config);
 ProgramHelper.RegisterServices(builder, configuration, config);
 ProgramHelper.RegisterAuthentication(builder, config);
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -70,8 +80,12 @@ app.UseRouting();
 
 app.UseRateLimiter();
 
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Logging and Monitoring middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapControllers();
 
@@ -144,5 +158,17 @@ public static class ProgramHelper
                         Window = TimeSpan.FromMinutes(1)
                     }));
         });
+    }
+
+    public static void AddLogging(WebApplicationBuilder builder) 
+    {
+        var logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Configuration) // Read from appsettings.json
+            .Enrich.FromLogContext()
+            //.WriteTo.Console() // Write logs to console
+            //.WriteTo.Seq(builder.Configuration["Serilog:SeqServerUrl"] ?? "http://localhost:5341") // Write to Seq server
+            .CreateLogger();
+
+        Log.Logger = logger;
     }
 }

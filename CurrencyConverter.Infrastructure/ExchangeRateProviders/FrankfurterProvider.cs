@@ -2,7 +2,9 @@
 using CurrencyConverter.Dto.Currency.Request;
 using CurrencyConverter.Dto.Currency.Response;
 using CurrencyConverter.Dto.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace CurrencyConverter.Infrastructure.ExchangeRateProviders;
@@ -17,12 +19,17 @@ public class FrankfurterProvider : IExchangeRateProvider
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ConfigDto _config;
     private readonly IMemoryCache _cache;
+    private readonly IHttpContextAccessor _accessor;
+    private readonly ILogger<FrankfurterProvider> _logger;
 
-    public FrankfurterProvider(IHttpClientFactory httpClientFactory, ConfigDto config, IMemoryCache cache)
+    public FrankfurterProvider(IHttpClientFactory httpClientFactory, ConfigDto config, IMemoryCache cache, IHttpContextAccessor accessor,
+        ILogger<FrankfurterProvider> logger)
     {
         _httpClientFactory = httpClientFactory;
         _config = config;
         _cache = cache;
+        _accessor = accessor;
+        _logger = logger;
     }
 
     #region Private Methods
@@ -81,6 +88,11 @@ public class FrankfurterProvider : IExchangeRateProvider
         };
     }
 
+    private string GetCorrelationId()
+    {
+        return _accessor.HttpContext?.Items["CorrelationId"]?.ToString() ?? string.Empty;
+    }
+
     #endregion
 
 
@@ -89,6 +101,8 @@ public class FrankfurterProvider : IExchangeRateProvider
 
     public async Task<ApiResponseDto<ExchangeRateResponseDto>> GetLatestExchangeRatesAsync(string baseCurrency)
     {
+        _logger.LogInformation("CorrelationId: {GetCorrelationId} - Fetching latest exchange rates for base currency: {baseCurrency}", GetCorrelationId(), baseCurrency);
+
         var resultSuccess = new ApiResponseDto<ExchangeRateResponseDto> { Success = true, Message = "Successful." };
 
         if (_cache.TryGetValue(LatestRatesCacheKey(baseCurrency), out var cachedRatesObj) && cachedRatesObj is ExchangeRateResponseDto cachedRates)
@@ -125,6 +139,8 @@ public class FrankfurterProvider : IExchangeRateProvider
 
     public async Task<ApiResponseDto<CurrencyConversionResponseDto>> ConvertCurrencyAsync(CurrencyConversionRequestDto requestDto)
     {
+        _logger.LogInformation("CorrelationId: {GetCorrelationId} - Converting currency from {From} to {To} with amount {Amount}", GetCorrelationId(), requestDto.From, requestDto.To, requestDto.Amount);
+
         var resultSuccess = new ApiResponseDto<CurrencyConversionResponseDto> { Success = true, Message = "Successful." };
 
         if (_cache.TryGetValue(ConvertCurrencyCacheKey(requestDto.From, requestDto.To, requestDto.Amount), out var cachedRatesObj) && cachedRatesObj is CurrencyConversionResponseDto cachedRates)
@@ -176,6 +192,8 @@ public class FrankfurterProvider : IExchangeRateProvider
 
     public async Task<PaginatedApiResponseDto<HistoricalExchangeRatesResponseDto>> GetHistoricalExchangeRatesAsync(HistoricalExchangeRatesRequestDto request)
     {
+        _logger.LogInformation("CorrelationId: {GetCorrelationId} - Fetching historical exchange rates for base currency: {BaseCurrency} from {StartDate} to {EndDate}", GetCorrelationId(), request.BaseCurrency, request.StartDate, request.EndDate);
+
         var resultSuccess = new PaginatedApiResponseDto<HistoricalExchangeRatesResponseDto> { Success = true, Message = "Successful." };
 
         if (_cache.TryGetValue(HistoricalExchangeRatesCacheKey(request.BaseCurrency, request.StartDate, request.EndDate), out var cachedRatesObj) && cachedRatesObj is HistoricalExchangeRatesResponseDto cachedRates)

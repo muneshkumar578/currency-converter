@@ -10,7 +10,6 @@ public class CurrencyService : ICurrencyService
 {
     private readonly ConfigDto _config;
     private readonly IExchangeRateProvider _exchangeRateProvider;
-    // ToDo: Logging here
 
     public CurrencyService(ConfigDto config, IExchangeRateProviderFactory factory)
     {
