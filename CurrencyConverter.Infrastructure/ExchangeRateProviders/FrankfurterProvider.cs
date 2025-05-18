@@ -43,7 +43,7 @@ public class FrankfurterProvider : IExchangeRateProvider
     }
 
 
-    private string LatestRatesEnpoint => "latestt?base={0}";
+    private string LatestRatesEnpoint => "latest?base={0}";
 
 
     private static string LatestRatesCacheKey(string baseCurrency)
